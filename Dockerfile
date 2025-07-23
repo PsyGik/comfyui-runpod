@@ -9,8 +9,11 @@ ENV APP_DIR=/app
 # Set working directory
 WORKDIR ${APP_DIR}
 
-# Install system dependencies, including git and aria2 for faster downloads
+# Install system dependencies, including Python, git and aria2 for faster downloads
 RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    python3-dev \
     git \
     wget \
     aria2 \
@@ -22,8 +25,8 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI.git
 
 # Install Python dependencies for ComfyUI
 RUN cd ComfyUI && \
-    python3 -m pip install --no-cache-dir -r requirements.txt && \
-    python3 -m pip install --no-cache-dir xformers
+    python3 -m pip install --default-timeout=100 --no-cache-dir -r requirements.txt && \
+    python3 -m pip install --default-timeout=100 --no-cache-dir xformers
 
 # Copy the entrypoint script into the container and make it executable
 COPY entrypoint.sh /entrypoint.sh
