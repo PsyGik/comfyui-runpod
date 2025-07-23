@@ -22,8 +22,8 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI.git
 
 # Install Python dependencies for ComfyUI
 RUN cd ComfyUI && \
-    pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir xformers
+    python3 -m pip install --no-cache-dir -r requirements.txt && \
+    python3 -m pip install --no-cache-dir xformers
 
 # Copy the entrypoint script into the container and make it executable
 COPY entrypoint.sh /entrypoint.sh
