@@ -30,4 +30,4 @@ ls -l "${COMFYUI_APP_DIR}"
 
 # Start ComfyUI
 echo "Starting ComfyUI..."
-exec python main.py --listen 0.0.0.0 --port 8188
+exec python3 main.py --listen 0.0.0.0 --port 8188
