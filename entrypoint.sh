@@ -26,7 +26,7 @@ ln -sfn "${COMFYUI_DATA_PATH}/output" output
 ln -sfn "${COMFYUI_DATA_PATH}/custom_nodes" custom_nodes
 
 echo "Symbolic links created:"
-ls -l "${COMFYUI_APP_DIR}" | grep "->"
+ls -l "${COMFYUI_APP_DIR}"
 
 # Start ComfyUI
 echo "Starting ComfyUI..."
