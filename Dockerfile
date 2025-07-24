@@ -5,7 +5,7 @@ FROM nvidia/cuda:12.8.1-runtime-ubuntu22.04
 ENV DEBIAN_FRONTEND=noninteractive
 ENV COMFYUI_PORT=8188
 ENV APP_DIR=/app
-ENV RUNPOD_VOLUME_PATH=/storage
+ENV RUNPOD_VOLUME_PATH=/storage/persistent
 
 # Set working directory
 WORKDIR ${APP_DIR}
@@ -27,12 +27,6 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI.git
 # Install Python dependencies for ComfyUI
 RUN cd ComfyUI && \
     python3 -m pip install --default-timeout=100 --no-cache-dir -r requirements.txt
-
-# Reinstall the correct PyTorch version to ensure compatibility
-RUN python3 -m pip install --no-cache-dir --force-reinstall torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
-
-# Install xformers separately
-RUN python3 -m pip install --default-timeout=100 --no-cache-dir xformers
 
 # Install additional dependencies for file manager
 RUN python3 -m pip install --no-cache-dir requests aiohttp aiofiles
