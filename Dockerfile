@@ -24,13 +24,15 @@ RUN apt-get update && apt-get install -y \
 # Clone the latest ComfyUI repository
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git
 
-# Install the latest PyTorch with CUDA 12.x support (includes support for RTX 5090)
-RUN python3 -m pip install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
-
 # Install Python dependencies for ComfyUI
 RUN cd ComfyUI && \
-    python3 -m pip install --default-timeout=100 --no-cache-dir -r requirements.txt && \
-    python3 -m pip install --default-timeout=100 --no-cache-dir xformers
+    python3 -m pip install --default-timeout=100 --no-cache-dir -r requirements.txt
+
+# Reinstall the correct PyTorch version to ensure compatibility
+RUN python3 -m pip install --no-cache-dir --force-reinstall torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+
+# Install xformers separately
+RUN python3 -m pip install --default-timeout=100 --no-cache-dir xformers
 
 # Install additional dependencies for file manager
 RUN python3 -m pip install --no-cache-dir requests aiohttp aiofiles
