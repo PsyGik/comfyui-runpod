@@ -42,6 +42,31 @@ ls -l "${COMFYUI_APP_DIR}"
 echo "Starting File Manager on port 8189..."
 python3 /app/file_manager.py 8189 "${COMFYUI_DATA_PATH}" &
 
+# Check for critical ComfyUI dependencies
+echo "Checking critical ComfyUI dependencies..."
+python3 -c "
+missing_deps = []
+try:
+    import einops
+    print('✅ einops available')
+except ImportError:
+    missing_deps.append('einops')
+    print('❌ einops missing')
+
+try:
+    import torch
+    print('✅ torch available')
+except ImportError:
+    missing_deps.append('torch')
+    print('❌ torch missing')
+
+if missing_deps:
+    print(f'⚠️  Missing critical dependencies: {missing_deps}')
+    print('Run /app/quick_fix_einops.sh or /app/install_custom_node_deps.sh to fix')
+else:
+    print('✅ All critical dependencies available')
+" || echo "Dependency check failed, continuing..."
+
 # Check CUDA compatibility before starting ComfyUI
 echo "Checking CUDA compatibility..."
 python3 -c "

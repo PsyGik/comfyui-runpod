@@ -41,7 +41,7 @@ RUN cd ComfyUI && \
     python3 -m pip install --default-timeout=100 --no-cache-dir \
     $(grep -v "^torch" requirements.txt | tr '\n' ' ') || \
     python3 -m pip install --default-timeout=100 --no-cache-dir \
-    accelerate transformers safetensors aiohttp pyyaml Pillow scipy tqdm psutil
+    accelerate transformers safetensors aiohttp pyyaml Pillow scipy tqdm psutil einops spandrel kornia
 
 # Copy and install additional dependencies for custom nodes
 COPY custom-nodes-requirements.txt /app/custom-nodes-requirements.txt
@@ -54,9 +54,10 @@ RUN python3 -m pip install --no-cache-dir requests aiohttp aiofiles
 COPY file_manager.py /app/file_manager.py
 COPY install_custom_node_deps.sh /app/install_custom_node_deps.sh
 COPY update_pytorch_rtx5090.sh /app/update_pytorch_rtx5090.sh
+COPY quick_fix_einops.sh /app/quick_fix_einops.sh
 COPY test_cuda.py /app/test_cuda.py
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh /app/install_custom_node_deps.sh /app/update_pytorch_rtx5090.sh
+RUN chmod +x /entrypoint.sh /app/install_custom_node_deps.sh /app/update_pytorch_rtx5090.sh /app/quick_fix_einops.sh
 
 # Expose the ports ComfyUI and File Manager will run on
 EXPOSE ${COMFYUI_PORT}

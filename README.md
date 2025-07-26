@@ -88,6 +88,12 @@ If custom nodes fail to load:
 2. Refer to `CUSTOM_NODES_DEPENDENCIES.md` for common issues
 3. Missing dependencies are automatically installed in new builds
 
+### ComfyUI Startup Issues
+If ComfyUI fails to start with missing module errors:
+- For `einops` errors: `/app/quick_fix_einops.sh`
+- For other missing modules: `/app/install_custom_node_deps.sh`
+- Rebuild container for permanent fix
+
 ### Storage Issues
 If your models don't persist between pod restarts:
 1. Ensure you're using the same RunPod volume

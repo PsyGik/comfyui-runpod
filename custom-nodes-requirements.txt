@@ -1,6 +1,11 @@
 # Additional dependencies for ComfyUI custom nodes
 # This file contains dependencies required by various custom nodes
 
+# Core ComfyUI dependencies (in case they're missing)
+einops>=0.6.0
+spandrel>=0.1.0
+kornia>=0.7.0
+
 # Computer Vision and Image Processing
 opencv-python-headless>=4.8.0
 matplotlib>=3.5.0

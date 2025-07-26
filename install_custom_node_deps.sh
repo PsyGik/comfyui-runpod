@@ -21,6 +21,7 @@ apt-get install -y \
 # Install Python dependencies
 echo "Installing Python dependencies..."
 pip install \
+    einops \
     opencv-python-headless \
     matplotlib \
     diffusers \
