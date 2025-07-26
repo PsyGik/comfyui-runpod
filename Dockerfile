@@ -36,12 +36,12 @@ RUN python3 -m pip install --default-timeout=100 --no-cache-dir \
     --pre torch torchvision torchaudio \
     --index-url https://download.pytorch.org/whl/nightly/cu128
 
-# Install Python dependencies for ComfyUI (excluding torch requirements)
+# Install ComfyUI Python dependencies (install everything, then upgrade torch)
 RUN cd ComfyUI && \
-    python3 -m pip install --default-timeout=100 --no-cache-dir \
-    $(grep -v "^torch" requirements.txt | tr '\n' ' ') || \
-    python3 -m pip install --default-timeout=100 --no-cache-dir \
-    accelerate transformers safetensors aiohttp pyyaml Pillow scipy tqdm psutil einops spandrel kornia
+    python3 -m pip install --default-timeout=100 --no-cache-dir -r requirements.txt && \
+    python3 -m pip install --default-timeout=100 --no-cache-dir --upgrade \
+    --pre torch torchvision torchaudio \
+    --index-url https://download.pytorch.org/whl/nightly/cu128
 
 # Copy and install additional dependencies for custom nodes
 COPY custom-nodes-requirements.txt /app/custom-nodes-requirements.txt
