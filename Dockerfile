@@ -30,9 +30,18 @@ RUN apt-get update && apt-get install -y \
 # Clone the latest ComfyUI repository
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git
 
-# Install Python dependencies for ComfyUI
+# Install latest stable PyTorch with CUDA 12.1+ support for RTX 5090
+# Using nightly builds which include support for newer GPU architectures
+RUN python3 -m pip install --default-timeout=100 --no-cache-dir \
+    --pre torch torchvision torchaudio \
+    --index-url https://download.pytorch.org/whl/nightly/cu128
+
+# Install Python dependencies for ComfyUI (excluding torch requirements)
 RUN cd ComfyUI && \
-    python3 -m pip install --default-timeout=100 --no-cache-dir -r requirements.txt
+    python3 -m pip install --default-timeout=100 --no-cache-dir \
+    $(grep -v "^torch" requirements.txt | tr '\n' ' ') || \
+    python3 -m pip install --default-timeout=100 --no-cache-dir \
+    accelerate transformers safetensors aiohttp pyyaml Pillow scipy tqdm psutil
 
 # Copy and install additional dependencies for custom nodes
 COPY custom-nodes-requirements.txt /app/custom-nodes-requirements.txt
@@ -44,8 +53,10 @@ RUN python3 -m pip install --no-cache-dir requests aiohttp aiofiles
 # Copy the file manager, installation script, and entrypoint script into the container
 COPY file_manager.py /app/file_manager.py
 COPY install_custom_node_deps.sh /app/install_custom_node_deps.sh
+COPY update_pytorch_rtx5090.sh /app/update_pytorch_rtx5090.sh
+COPY test_cuda.py /app/test_cuda.py
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh /app/install_custom_node_deps.sh
+RUN chmod +x /entrypoint.sh /app/install_custom_node_deps.sh /app/update_pytorch_rtx5090.sh
 
 # Expose the ports ComfyUI and File Manager will run on
 EXPOSE ${COMFYUI_PORT}

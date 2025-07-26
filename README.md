@@ -101,7 +101,13 @@ If downloads fail:
 3. Try downloading smaller files first
 
 ### GPU Issues
-For RTX 5090 or other new GPUs:
+For RTX 5090 or CUDA compatibility errors:
+- The container includes PyTorch nightly builds with RTX 5090 support
+- If you get "no kernel image available" errors, see `RTX5090_CUDA_GUIDE.md`
+- Run `/app/update_pytorch_rtx5090.sh` inside the container for manual updates
+- Use `--cpu` flag as fallback if CUDA issues persist
+
+For other new GPUs:
 - The container includes the latest PyTorch with CUDA 12.4 support
 - Ensure your pod has GPU access enabled
 

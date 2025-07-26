@@ -42,6 +42,35 @@ ls -l "${COMFYUI_APP_DIR}"
 echo "Starting File Manager on port 8189..."
 python3 /app/file_manager.py 8189 "${COMFYUI_DATA_PATH}" &
 
+# Check CUDA compatibility before starting ComfyUI
+echo "Checking CUDA compatibility..."
+python3 -c "
+import torch
+print(f'PyTorch version: {torch.__version__}')
+print(f'CUDA available: {torch.cuda.is_available()}')
+if torch.cuda.is_available():
+    print(f'CUDA version: {torch.version.cuda}')
+    print(f'GPU: {torch.cuda.get_device_name(0)}')
+    print(f'GPU compute capability: {torch.cuda.get_device_capability(0)}')
+    # Test a simple CUDA operation
+    try:
+        x = torch.randn(2, 2).cuda()
+        y = x @ x
+        print('CUDA operations working correctly')
+    except Exception as e:
+        print(f'CUDA operation failed: {e}')
+        print('Will try to use CPU fallback')
+" || echo "CUDA check failed, continuing with startup..."
+
 # Start ComfyUI
 echo "Starting ComfyUI..."
-exec python3 main.py --listen 0.0.0.0 --port 8188
+
+# Try to start with CUDA first, fallback to CPU if it fails
+if python3 -c "import torch; torch.randn(1).cuda()" 2>/dev/null; then
+    echo "CUDA is working, starting with GPU acceleration..."
+    exec python3 main.py --listen 0.0.0.0 --port 8188
+else
+    echo "⚠️  CUDA not working properly, starting in CPU mode..."
+    echo "For better performance, try running: /app/update_pytorch_rtx5090.sh"
+    exec python3 main.py --listen 0.0.0.0 --port 8188 --cpu
+fi
