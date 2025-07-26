@@ -8,6 +8,7 @@ kornia>=0.7.0
 
 # Computer Vision and Image Processing
 opencv-python-headless>=4.8.0
+numpy>=2
 matplotlib>=3.5.0
 
 # Machine Learning and AI
