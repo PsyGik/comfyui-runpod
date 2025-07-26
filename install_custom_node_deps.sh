@@ -36,6 +36,10 @@ pip install \
     scikit-image \
     imageio \
     imageio-ffmpeg \
+    deepdiff \
+    volcengine \
+    replicate \
+    segment_anything \
     || echo "Some Python packages may already be installed"
 
 echo "Custom node dependencies installation completed!"
