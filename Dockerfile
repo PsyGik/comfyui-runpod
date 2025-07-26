@@ -10,7 +10,7 @@ ENV RUNPOD_VOLUME_PATH=/storage/persistent
 # Set working directory
 WORKDIR ${APP_DIR}
 
-# Install system dependencies, including Python, git and aria2 for faster downloads
+# Install system dependencies, including Python, git, aria2 and OpenGL libraries
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
@@ -18,6 +18,12 @@ RUN apt-get update && apt-get install -y \
     git \
     wget \
     aria2 \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libgomp1 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -28,13 +34,18 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI.git
 RUN cd ComfyUI && \
     python3 -m pip install --default-timeout=100 --no-cache-dir -r requirements.txt
 
+# Copy and install additional dependencies for custom nodes
+COPY custom-nodes-requirements.txt /app/custom-nodes-requirements.txt
+RUN python3 -m pip install --default-timeout=100 --no-cache-dir -r /app/custom-nodes-requirements.txt
+
 # Install additional dependencies for file manager
 RUN python3 -m pip install --no-cache-dir requests aiohttp aiofiles
 
-# Copy the file manager and entrypoint script into the container
+# Copy the file manager, installation script, and entrypoint script into the container
 COPY file_manager.py /app/file_manager.py
+COPY install_custom_node_deps.sh /app/install_custom_node_deps.sh
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN chmod +x /entrypoint.sh /app/install_custom_node_deps.sh
 
 # Expose the ports ComfyUI and File Manager will run on
 EXPOSE ${COMFYUI_PORT}

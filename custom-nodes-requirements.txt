@@ -1,0 +1,26 @@
+# Additional dependencies for ComfyUI custom nodes
+# This file contains dependencies required by various custom nodes
+
+# Computer Vision and Image Processing
+opencv-python-headless>=4.8.0
+matplotlib>=3.5.0
+
+# Machine Learning and AI
+diffusers>=0.20.0
+timm>=0.9.0
+facexlib>=0.3.0
+
+# Image Manipulation
+blend-modes>=2.1.0
+piexif>=1.1.3
+
+# Utilities
+simpleeval>=0.9.13
+watchdog>=3.0.0
+pyOpenSSL>=23.0.0
+
+# Additional dependencies that may be needed by custom nodes
+scipy>=1.9.0
+scikit-image>=0.19.0
+imageio>=2.22.0
+imageio-ffmpeg>=0.4.7

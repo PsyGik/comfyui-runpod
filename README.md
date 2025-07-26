@@ -10,6 +10,7 @@ A Docker container for running ComfyUI on RunPod with persistent storage and an 
 - 📁 **File Manager** - Web-based UI for downloading and managing models
 - ⬇️ **Smart Downloads** - Support for HuggingFace, CivitAI, and direct links
 - 🔄 **Progress Tracking** - Real-time download progress monitoring
+- 🔌 **Custom Nodes Support** - Pre-installed dependencies for popular custom nodes
 
 ## Quick Start
 
@@ -80,6 +81,12 @@ All your models, inputs, outputs, and custom nodes are automatically saved to pe
 - `RUNPOD_VOLUME_PATH` - Path to persistent storage (default: /workspace)
 
 ## Troubleshooting
+
+### Custom Node Issues
+If custom nodes fail to load:
+1. Check the logs for missing dependencies
+2. Refer to `CUSTOM_NODES_DEPENDENCIES.md` for common issues
+3. Missing dependencies are automatically installed in new builds
 
 ### Storage Issues
 If your models don't persist between pod restarts:
